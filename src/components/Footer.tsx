@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Instagram, MessageCircle, Mail, Phone, MapPin, Heart, ArrowUp } from 'lucide-react';
 
@@ -11,6 +12,41 @@ const serviceLinks = ['Wedding Photography', 'Pre-Wedding Shoots', 'Maternity Se
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('sending');
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: 'ce7883fe-b30f-4463-a895-d97f6ba45371',
+          subject: 'Website notification',
+          email: email
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        setStatus('success');
+        setEmail('');
+        setTimeout(() => setStatus('idle'), 3000);
+      } else {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 3000);
+      }
+    } catch (error) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
+  };
+
   const scrollTo = (id: string) => {
     document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -126,16 +162,31 @@ export default function Footer() {
             {/* Newsletter */}
             <div>
               <p className="text-luxury-subtle text-xs font-semibold uppercase tracking-wider mb-3">Stay Inspired</p>
-              <div className="flex gap-2">
+              <form onSubmit={handleSubscribe} className="flex gap-2">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email"
+                  required
                   className="flex-1 bg-luxury-card border border-luxury-border text-white text-sm placeholder-luxury-muted px-3 py-2.5 rounded-lg focus:outline-none focus:border-luxury-gold transition-colors"
                 />
-                <button className="px-4 py-2.5 bg-luxury-gold text-luxury-dark text-sm font-bold rounded-lg hover:bg-luxury-gold-light transition-colors">
-                  <Mail size={14} />
+                <button 
+                  type="submit"
+                  disabled={status === 'sending' || status === 'success'}
+                  className="px-4 py-2.5 bg-luxury-gold text-luxury-dark text-sm font-bold rounded-lg hover:bg-luxury-gold-light transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center min-w-[44px]"
+                >
+                  {status === 'sending' ? (
+                    <div className="w-4 h-4 rounded-full border-2 border-luxury-dark border-t-transparent animate-spin" />
+                  ) : status === 'success' ? (
+                    <span>✓</span>
+                  ) : (
+                    <Mail size={14} />
+                  )}
                 </button>
-              </div>
+              </form>
+              {status === 'error' && <p className="text-red-400 text-xs mt-2">Failed to subscribe. Please try again.</p>}
+              {status === 'success' && <p className="text-green-400 text-xs mt-2">Thanks for subscribing!</p>}
             </div>
           </div>
         </div>

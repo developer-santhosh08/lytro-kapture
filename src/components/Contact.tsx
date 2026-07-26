@@ -28,14 +28,26 @@ function validate(data: FormData): FormErrors {
   if (!data.name.trim()) errors.name = 'Name is required';
   if (!data.email.trim()) errors.email = 'Email is required';
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = 'Enter a valid email';
-  if (!data.phone.trim()) errors.phone = 'Phone number is required';
-  else if (!/^[+\d\s-]{10,}$/.test(data.phone)) errors.phone = 'Enter a valid phone number';
+  const digitsOnly = data.phone.replace(/\D/g, '');
+  if (!digitsOnly) errors.phone = 'Phone number is required';
+  else if (digitsOnly.length !== 10) errors.phone = 'Phone number must be exactly 10 digits';
   if (!data.eventType) errors.eventType = 'Please select an event type';
   if (!data.eventDate) errors.eventDate = 'Please select your event date';
   if (!data.location.trim()) errors.location = 'Location is required';
   if (!data.message.trim()) errors.message = 'Tell us a bit about your project';
   return errors;
 }
+const Field = ({ name, label, error, children }: { name?: string; label: string; error?: string; children: React.ReactNode }) => (
+  <div>
+    <label className="block text-luxury-subtle text-sm font-medium mb-2">{label}</label>
+    {children}
+    {error && (
+      <p className="mt-1.5 text-red-400 text-xs flex items-center gap-1">
+        <AlertCircle size={11} /> {error}
+      </p>
+    )}
+  </div>
+);
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
@@ -61,22 +73,30 @@ export default function Contact() {
       return;
     }
     setStatus('sending');
-    // Simulate API call
-    await new Promise(r => setTimeout(r, 2000));
-    setStatus('success');
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: 'ce7883fe-b30f-4463-a895-d97f6ba45371',
+          subject: 'Website contact form',
+          from_name: formData.name,
+          ...formData
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
   };
-
-  const Field = ({ name, label, error, children }: { name: string; label: string; error?: string; children: React.ReactNode }) => (
-    <div>
-      <label className="block text-luxury-subtle text-sm font-medium mb-2">{label}</label>
-      {children}
-      {error && (
-        <p className="mt-1.5 text-red-400 text-xs flex items-center gap-1">
-          <AlertCircle size={11} /> {error}
-        </p>
-      )}
-    </div>
-  );
 
   return (
     <section id="contact" className="pt-10 md:pt-16 pb-20 md:pb-32 bg-luxury-dark relative overflow-hidden">
@@ -194,7 +214,17 @@ export default function Contact() {
                     <p className="text-luxury-muted leading-relaxed mb-8">
                       Thank you for reaching out. We've received your enquiry and will respond within 24 hours. Can't wait to hear more about your project!
                     </p>
-                    <button onClick={() => setStatus('idle')} className="btn-gold">
+                    <button 
+                      onClick={() => {
+                        setStatus('idle');
+                        setFormData({
+                          name: '', email: '', phone: '', eventType: '',
+                          eventDate: '', location: '', budget: '', message: ''
+                        });
+                        setErrors({});
+                      }} 
+                      className="btn-gold"
+                    >
                       Submit Another Enquiry
                     </button>
                   </motion.div>
@@ -225,9 +255,13 @@ export default function Contact() {
                       <Field name="phone" label="Phone Number *" error={errors.phone}>
                         <input
                           type="tel"
-                          placeholder="+91 98765 43210"
+                          maxLength={10}
+                          placeholder="9876543210"
                           value={formData.phone}
-                          onChange={e => update('phone', e.target.value)}
+                          onChange={e => {
+                            const val = e.target.value.replace(/\D/g, '');
+                            update('phone', val);
+                          }}
                           className={`custom-input ${errors.phone ? 'border-red-500/60' : ''}`}
                         />
                       </Field>
@@ -254,15 +288,31 @@ export default function Contact() {
                       </select>
                     </Field>
 
-                    <Field name="location" label="Event Location *" error={errors.location}>
-                      <input
-                        type="text"
-                        placeholder="Udaipur, Rajasthan / Mumbai, Maharashtra"
-                        value={formData.location}
-                        onChange={e => update('location', e.target.value)}
-                        className={`custom-input ${errors.location ? 'border-red-500/60' : ''}`}
-                      />
-                    </Field>
+                    <div className="grid sm:grid-cols-2 gap-5">
+                      <Field name="location" label="Event Location *" error={errors.location}>
+                        <input
+                          type="text"
+                          placeholder="Udaipur, Rajasthan / Mumbai..."
+                          value={formData.location}
+                          onChange={e => update('location', e.target.value)}
+                          className={`custom-input ${errors.location ? 'border-red-500/60' : ''}`}
+                        />
+                      </Field>
+                      
+                      <Field name="budget" label="Estimated Budget (Optional)" error={errors.budget}>
+                        <select
+                          value={formData.budget}
+                          onChange={e => update('budget', e.target.value)}
+                          className={`custom-input ${errors.budget ? 'border-red-500/60' : ''}`}
+                        >
+                          <option value="">Select range...</option>
+                          <option value="Under ₹50,000">Under ₹50,000</option>
+                          <option value="₹50,000 - ₹1,00,000">₹50,000 - ₹1,00,000</option>
+                          <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
+                          <option value="₹2,50,000+">₹2,50,000+</option>
+                        </select>
+                      </Field>
+                    </div>
 
                     <Field name="message" label="Tell Us About Your Vision *" error={errors.message}>
                       <textarea
@@ -274,7 +324,14 @@ export default function Contact() {
                       />
                     </Field>
 
-                    <div className="flex justify-end mt-6">
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
+                      {status === 'error' ? (
+                        <p className="text-red-400 text-sm flex items-center gap-2">
+                          <AlertCircle size={14} /> Failed to send message. Please try again.
+                        </p>
+                      ) : (
+                        <div />
+                      )}
                       <motion.button
                         type="submit"
                         disabled={status === 'sending'}
