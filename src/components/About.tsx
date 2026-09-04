@@ -73,6 +73,8 @@ export default function About() {
                 alt="Lytro Kapture" 
                 className="w-full h-full md:h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                 referrerPolicy="no-referrer"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             </div>
@@ -91,7 +93,7 @@ export default function About() {
               
               <div className="relative h-[200px] md:h-[500px] lg:h-[600px] w-full rounded-2xl">
                 <div className="absolute top-0 left-0 w-[60%] h-[70%] rounded-2xl overflow-hidden z-10 border-4 lg:border-8 border-[#0F172A]">
-                  <img src="/images/about-001.jpg" className="w-full h-full object-cover object-top" alt="Wedding Detail" />
+                  <img src="/images/about-001.jpg" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" alt="Wedding Detail" />
                 </div>
                 <div className="absolute bottom-0 right-0 w-[55%] h-[60%] rounded-2xl overflow-hidden z-20 border-4 lg:border-8 border-[#0F172A] group">
                   <img src="/images/herobanner/006.jpg" className="w-full h-full object-cover" alt="Couple Portrait" />

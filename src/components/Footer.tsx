@@ -63,7 +63,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center overflow-hidden">
-                <img src="/images/lk-logo.jpeg" alt="LK Logo" className="w-full h-full object-cover" />
+                <img src="/images/lk-logo.webp" alt="LK Logo" className="w-full h-full object-cover" />
               </div>
               <div>
                 <span 

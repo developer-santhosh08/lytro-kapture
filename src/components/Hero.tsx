@@ -3,15 +3,15 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Aperture, MapPin, Instagram } from 'lucide-react';
 
 const DESKTOP_SLIDES = [
-  { src: '/images/herobanner/002.jpg', label: '', align: '50% 0%' },
-  { src: '/images/herobanner/24.JPG', label: '', align: '50% 0%' },
-  // { src: '/images/herobanner/006.jpg', label: '', align: '50% 70%' }, // Commented for desktop
+  { src: '/images/herobanner/002.webp', label: '', align: '50% 0%' },
+  { src: '/images/herobanner/24.webp', label: '', align: '50% 0%' },
+  // { src: '/images/herobanner/006.webp', label: '', align: '50% 70%' }, // Commented for desktop
 ];
 
 const MOBILE_SLIDES = [
-  { src: '/images/herobanner/07.JPG', label: '', align: '50% 0%' },
-  { src: '/images/herobanner/007.jpg', label: '', align: '50% 0%' },
-  { src: '/images/herobanner/006.jpg', label: '', align: '50% 70%' },
+  { src: '/images/herobanner/07.webp', label: '', align: '50% 0%' },
+  { src: '/images/herobanner/007.webp', label: '', align: '50% 0%' },
+  { src: '/images/herobanner/006.webp', label: '', align: '50% 70%' },
 ];
 
 export default function Hero() {
@@ -102,7 +102,8 @@ export default function Hero() {
             className="rounded-full transition-all duration-500"
             style={{
               width: '5px',
-              height: i === safeCurrent ? '36px' : '8px',
+              height: '36px',
+              transform: i === safeCurrent ? 'scaleY(1)' : 'scaleY(0.22)',
               background: i === safeCurrent ? '#F59E0B' : 'rgba(255,255,255,0.22)',
               boxShadow: i === safeCurrent ? '0 0 8px rgba(245,158,11,0.5)' : 'none',
             }}

@@ -1,0 +1,13 @@
+# Lytro Kapture Photography
+
+Lytro Kapture is a premium luxury photography studio based in Salem, Tamil Nadu, specializing in wedding photography, pre-wedding shoots, maternity, and portraits.
+
+## Navigation
+- [Home](/)
+- [Gallery](/gallery)
+- [Instagram](https://www.instagram.com/lytrokapture_fotography)
+
+## Contact Information
+- Email: lytrokapture777@gmail.com
+- Phone: +91 95143 62836
+- Location: Karuppur, Salem, Tamil Nadu

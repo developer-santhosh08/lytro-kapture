@@ -60,7 +60,7 @@ export default function Navigation() {
           {/* Logo */}
           <button onClick={() => scrollTo('#home')} className="flex items-center gap-3 group">
             <div className="relative w-14 h-14 flex items-center justify-center rounded-full bg-luxury-gold/10 border border-luxury-gold/30 group-hover:bg-luxury-gold/20 transition-all duration-300 overflow-hidden shadow-sm">
-              <img src="/images/lk-logo.jpeg" alt="LK Logo" className="w-full h-full object-cover" />
+              <img src="/images/lk-logo.webp" alt="LK Logo" className="w-full h-full object-cover" />
             </div>
             <div className="leading-none text-left">
               <span 
@@ -112,6 +112,7 @@ export default function Navigation() {
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle mobile menu"
             className="lg:hidden w-10 h-10 flex items-center justify-center rounded-full border border-luxury-border text-white hover:border-luxury-gold hover:text-luxury-gold transition-all duration-200"
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}

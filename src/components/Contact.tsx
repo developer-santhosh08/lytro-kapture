@@ -37,10 +37,12 @@ function validate(data: FormData): FormErrors {
   if (!data.message.trim()) errors.message = 'Tell us a bit about your project';
   return errors;
 }
+import React from 'react';
+
 const Field = ({ name, label, error, children }: { name?: string; label: string; error?: string; children: React.ReactNode }) => (
   <div>
-    <label className="block text-luxury-subtle text-sm font-medium mb-2">{label}</label>
-    {children}
+    <label htmlFor={name} className="block text-luxury-subtle text-sm font-medium mb-2">{label}</label>
+    {React.isValidElement(children) ? React.cloneElement(children, { id: name } as any) : children}
     {error && (
       <p className="mt-1.5 text-red-400 text-xs flex items-center gap-1">
         <AlertCircle size={11} /> {error}

@@ -64,6 +64,8 @@ export default function CatalogList() {
                   <img
                     src={item.imageUrl}
                     alt={item.title}
+                    width="600"
+                    height="800"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                     loading="lazy"
@@ -147,6 +149,8 @@ export default function CatalogList() {
                   <img
                     src={selectedItem.imageUrl}
                     alt={selectedItem.title}
+                    width="800"
+                    height="600"
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />

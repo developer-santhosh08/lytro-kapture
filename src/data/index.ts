@@ -65,7 +65,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: 'wedding',
     title: 'A Timeless Union',
     location: 'Tamil Nadu',
-    imageUrl: '/images/herobanner/26.jpeg',
+    imageUrl: '/images/herobanner/26.webp',
     featured: true,
   },
   { id: 'pw1', category: 'pre-wedding', title: 'Pre-Wedding', location: 'Tamil Nadu', imageUrl: '/images/portfolio/preweding/001.jpg', featured: true },
@@ -166,9 +166,9 @@ export const portfolioItems: PortfolioItem[] = [
 
 // ─── Hero slideshow ────────────────────────────────────────────────────
 export const heroImages = [
-  { url: '/images/hero-2.png', label: 'Pre-Wedding · Yercaud Hills' },
-  { url: '/images/hero-3.png', label: 'Portrait · Salem' },
-  { url: '/images/hero-4.png', label: 'Pre-Wedding · Vaiyappamalai' },
+  { url: '/images/hero-2.webp', label: 'Pre-Wedding · Yercaud Hills' },
+  { url: '/images/hero-3.webp', label: 'Portrait · Salem' },
+  { url: '/images/hero-4.webp', label: 'Pre-Wedding · Vaiyappamalai' },
 ];
 
 export const stats = [

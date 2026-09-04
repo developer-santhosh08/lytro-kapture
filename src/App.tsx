@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -8,17 +8,17 @@ import Loader from './components/Loader';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
-import Portfolio from './components/Portfolio';
-import CatalogList from './components/CatalogList';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
-import FullGallery from './components/FullGallery';
 import { Routes, Route, useLocation } from 'react-router-dom';
+
+const Portfolio = lazy(() => import('./components/Portfolio'));
+const CatalogList = lazy(() => import('./components/CatalogList'));
+const Contact = lazy(() => import('./components/Contact'));
+const FullGallery = lazy(() => import('./components/FullGallery'));
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Home component containing the landing page sections
 function Home() {
   return (
     <>
@@ -26,9 +26,11 @@ function Home() {
       <main>
         <Hero />
         <About />
-        <Portfolio />
-        <CatalogList />
-        <Contact />
+        <Suspense fallback={<div className="h-[10vh] bg-luxury-dark"></div>}>
+          <Portfolio />
+          <CatalogList />
+          <Contact />
+        </Suspense>
       </main>
       <Footer />
       <BackToTop />
@@ -87,10 +89,10 @@ export default function App() {
   useEffect(() => {
     // Preload hero images
     const urls = [
-      '/images/hero-1.png',
-      '/images/hero-2.png',
-      '/images/hero-3.png',
-      '/images/hero-4.png',
+      '/images/hero-1.webp',
+      '/images/hero-2.webp',
+      '/images/hero-3.webp',
+      '/images/hero-4.webp',
     ];
     urls.forEach(url => {
       const img = new Image();
@@ -108,7 +110,11 @@ export default function App() {
       <div className="min-h-screen bg-luxury-dark text-white overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/gallery" element={<FullGallery />} />
+          <Route path="/gallery" element={
+            <Suspense fallback={<Loader onComplete={() => {}} />}>
+              <FullGallery />
+            </Suspense>
+          } />
         </Routes>
       </div>
     </>
