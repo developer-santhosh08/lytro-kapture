@@ -148,7 +148,7 @@ export default function Hero() {
         <motion.button
           onClick={() => scrollTo('about')}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
+          transition={{ duration: 0.5 }}
           className="flex flex-col items-center gap-1 text-[#0F172A]/70 hover:text-[#F59E0B] transition-colors duration-300"
         >
           <span className="text-[9px] tracking-[0.35em] uppercase font-black">Scroll</span>
